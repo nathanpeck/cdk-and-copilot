@@ -1,9 +1,9 @@
-FROM node:14 AS build
+FROM public.ecr.aws/docker/library/node:18 AS build
 WORKDIR /srv
 ADD package.json .
 RUN npm install
 
-FROM node:14-slim
+FROM public.ecr.aws/docker/library/node:18-slim
 COPY --from=build /srv .
 ADD . .
 EXPOSE 80

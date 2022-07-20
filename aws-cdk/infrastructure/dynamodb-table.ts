@@ -1,7 +1,10 @@
-import * as dynamodb from "@aws-cdk/aws-dynamodb";
-import * as ecs from "@aws-cdk/aws-ecs";
-import * as cdk from "@aws-cdk/core";
+import { aws_ecs as ecs } from 'aws-cdk-lib';
+import { aws_dynamodb as dynamodb } from 'aws-cdk-lib';
 import { ContainerMutatingHook, ServiceExtension, Service } from "@aws-cdk-containers/ecs-service-extensions";
+
+// keep this import separate from other imports to reduce chance for merge conflicts with v2-main
+// eslint-disable-next-line no-duplicate-imports, import/order
+import { Construct } from 'constructs';
 
 export interface DynamoDBTableHookProps {
   table: dynamodb.Table
@@ -60,7 +63,7 @@ export class DynamoDbTable extends ServiceExtension {
   }
 
   // Before the service is created go ahead and create the load balancer itself.
-  prehook(service: Service, scope: cdk.Construct) {
+  prehook(service: Service, scope: Construct) {
     this.parentService = service;
     if (this.props.table) {
       this.table = this.props.table;

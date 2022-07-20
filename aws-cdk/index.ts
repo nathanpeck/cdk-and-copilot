@@ -1,6 +1,6 @@
-import { ContainerImage } from '@aws-cdk/aws-ecs';
-import * as dynamodb from '@aws-cdk/aws-dynamodb';
-import { App, Stack } from '@aws-cdk/core';
+import { aws_ecs as ecs } from 'aws-cdk-lib';
+import { aws_dynamodb as dynamodb } from 'aws-cdk-lib';
+import { App, Stack } from 'aws-cdk-lib';
 import { DynamoDbTable } from './infrastructure/dynamodb-table';
 
 import {
@@ -19,23 +19,32 @@ const environment = new Environment(stack, 'production');
 
 /** Define the hit counter service */
 const hitCounterDescription = new ServiceDescription();
+
+// Add the container
 hitCounterDescription.add(new Container({
   cpu: 1024,
   memoryMiB: 2048,
   trafficPort: 80,
-  image: ContainerImage.fromAsset('app')
+  image: ecs.ContainerImage.fromAsset('app')
 }));
+
+// Add autoscaling
 hitCounterDescription.add(new ScaleOnCpuUtilization({
   initialTaskCount: 2,
   minTaskCount: 2,
 }));
-hitCounterDescription.add(new HttpLoadBalancerExtension());
+
+// Add a DynamoDB table
 hitCounterDescription.add(new DynamoDbTable('hits', {
   partitionKey: {
     name: 'counter',
-    type: dynamodb.AttributeType.STRING
-  }
+    type: dynamodb.AttributeType.STRING,
+  },
+  billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
 }));
+
+// Add a load balancer
+hitCounterDescription.add(new HttpLoadBalancerExtension());
 
 // Add the hit counter service to the production environment.
 new Service(stack, 'hit-counter', {

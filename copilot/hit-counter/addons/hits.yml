@@ -10,8 +10,9 @@ Parameters:
     Description: The name of the service, job, or workflow being deployed.
 Resources:
   hits:
+    Metadata:
+      'aws:copilot:description': 'An Amazon DynamoDB table for hits'
     Type: AWS::DynamoDB::Table
-    DeletionPolicy: Retain
     Properties:
       TableName: !Sub ${App}-${Env}-${Name}-hits
       AttributeDefinitions:
@@ -23,13 +24,15 @@ Resources:
           KeyType: HASH
 
   hitsAccessPolicy:
+    Metadata:
+      'aws:copilot:description': 'An IAM ManagedPolicy for your service to access the hits db'
     Type: AWS::IAM::ManagedPolicy
     Properties:
       Description: !Sub
         - Grants CRUD access to the Dynamo DB table ${Table}
         - { Table: !Ref hits }
       PolicyDocument:
-        Version: 2012-10-17
+        Version: '2012-10-17'
         Statement:
           - Sid: DDBActions
             Effect: Allow
@@ -51,10 +54,10 @@ Resources:
               - dynamodb:Query
               - dynamodb:Scan
             Effect: Allow
-            Resource: !Sub ${ hits.Arn}/Index/*
+            Resource: !Sub ${ hits.Arn}/index/*
 
 Outputs:
-  hitsTable:
+  hitsName:
     Description: "The name of this DynamoDB."
     Value: !Ref hits
   hitsAccessPolicy:
