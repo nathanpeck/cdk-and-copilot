@@ -7,7 +7,6 @@ import {
   Container,
   Environment,
   HttpLoadBalancerExtension,
-  ScaleOnCpuUtilization,
   Service,
   ServiceDescription
 } from '@aws-cdk-containers/ecs-service-extensions';
@@ -26,12 +25,6 @@ hitCounterDescription.add(new Container({
   memoryMiB: 2048,
   trafficPort: 80,
   image: ecs.ContainerImage.fromAsset('app')
-}));
-
-// Add autoscaling
-hitCounterDescription.add(new ScaleOnCpuUtilization({
-  initialTaskCount: 2,
-  minTaskCount: 2,
 }));
 
 // Add a DynamoDB table
