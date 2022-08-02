@@ -1,3 +1,5 @@
+
+```
 copilot env init
 copilot env deploy --name test
 copilot app init
@@ -7,3 +9,4 @@ copilot storage init
   Table primary key: counter
   Table primary key type: string
 copilot deploy
+```
