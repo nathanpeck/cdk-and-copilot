@@ -1,13 +1,13 @@
 var aws = require('aws-sdk');
 const express = require('express');
 const app = express();
-const table = process.env.HITS_TABLE;
-const PORT = 80; // The port to listen on
+const table = process.env.HITS_NAME;
+const PORT = 80; // The port to listen on.
 
 const dynamodb = new aws.DynamoDB.DocumentClient();
 
 if (!table) {
-  console.error('Warning: The HITS_TABLE environment variable needs to be set with the name of a DynamoDB table');
+  console.error('Warning: The HITS_NAME environment variable needs to be set with the name of a DynamoDB table');
 }
 
 const os = require('os');
@@ -15,8 +15,8 @@ const hostname = os.hostname();
 
 app.get('*', function (req, res) {
   if (!table) {
-    console.error('Error: The HITS_TABLE environment variable needs to be set with the name of a DynamoDB table');
-    return res.send('Error: The HITS_TABLE environment variable needs to be set with the name of a DynamoDB table');
+    console.error('Error: The HITS_NAME environment variable needs to be set with the name of a DynamoDB table');
+    return res.send('Error: The HITS_NAME environment variable needs to be set with the name of a DynamoDB table');
   }
 
   dynamodb.update({

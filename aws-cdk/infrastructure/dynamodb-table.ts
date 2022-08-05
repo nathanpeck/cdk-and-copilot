@@ -58,7 +58,7 @@ export class DynamoDbTable extends ServiceExtension {
     if (props.environmentVariableName) {
       this.environmentVariableName = props.environmentVariableName;
     } else {
-      this.environmentVariableName = this.tableName.toUpperCase() + '_TABLE';
+      this.environmentVariableName = this.tableName.toUpperCase() + '_NAME';
     }
   }
 
