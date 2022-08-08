@@ -11,6 +11,6 @@
   "license": "MIT",
   "dependencies": {
     "express": "4.17.1",
-    "aws-sdk": "2.784.0"
+    "aws-sdk": "2.814.0"
   }
 }
